@@ -1,23 +1,26 @@
-# # Implementation of Kruskals Minimum Spanning Tree Algorithm
+# Implementation of Kruskals Minimum Spanning Tree Algorithm
 
-# # Part 3
-# # 1. Sort all the edges in non-decreasing order of their weight.
-# # 2. Pick the smallest edge. Check if it forms a cycle with the spanning tree formed so far. If cycle is not formed, include this edge. Else, discard it.
-# # 3. Repeat step 2 until there are (V-1) edges in the spanning tree.
+# Step 1. Sort all the edges in non-decreasing order of their weight.
+# Step 2. Pick the smallest edge. Check if it forms a cycle with the spanning tree formed so far. If cycle is not formed, include this edge. Else, discard it.
+# Step 3. Repeat step 2 until there are (V-1) edges in the spanning tree.
 
 class Graph: 
-    def __init__(self,vertices): 
-        self.V= vertices 
-        self.graph = [] 
+    def __init__(self, num_of_vertices): 
+        self.V = num_of_vertices 
+        self.edges = [] 
 
-    def addEdge(self,u,v,w): 
-        self.graph.append([u,v,w]) 
+    # adds an edge
+    def add_edge(self,vertex_1,vertex_2,weight): 
+        self.edges.append([vertex_1,vertex_2,weight]) 
 
-    def find(self, parent, i): 
+    # finds the very first parent/root
+    def find(self, parent, i):
+        # the very first parent should loop back to itself
         if parent[i] == i: 
             return i 
         return self.find(parent, parent[i]) 
 
+    # given two parents, compress the two into one
     def union(self, parent, rank, x, y): 
         xroot = self.find(parent, x) 
         yroot = self.find(parent, y) 
@@ -30,36 +33,42 @@ class Graph:
             parent[yroot] = xroot 
             rank[xroot] += 1
 
-    def KruskalMST(self): 
+    def kruskals_mst(self): 
         out = []
-        i = 0 # An index variable, used for sorted edges 
-
-        self.graph =  sorted(self.graph,key=lambda item: item[2])
-        parent = [] ; rank = []
+        i = 0 
         
+        # Step 1: sort by weight
+        self.edges =  sorted(self.edges,key=lambda e: e[2])
+        parent = [] ; rank = []
+
         for node in range(self.V): 
             parent.append(node) 
             rank.append(0) 
         
+        # Step 3: repeating step 2 until spanning tree has (V - 1) vertices
         while len(out) < self.V -1:
-            u,v,w =  self.graph[i] 
+            vertex_1, vertex_2, weight =  self.edges[i] 
             i = i + 1
-            x = self.find(parent, u) 
-            y = self.find(parent ,v)  
-            if x != y: 
-                out.append([u,v,w]) 
-                self.union(parent, rank, x, y)  
+            root_of_vertex_1 = self.find(parent, vertex_1) 
+            root_of_vertex_2 = self.find(parent ,vertex_2)  
+
+            # Step 2: if root of vertex 1 is not equal to root of vertex 2, then there is no cycle
+            if root_of_vertex_1 != root_of_vertex_2: 
+                out.append([vertex_1,vertex_2,weight]) 
+                self.union(parent, rank, vertex_1, vertex_2)  
         
         return out
 
-g = Graph(5) 
-g.addEdge(0, 1, 200) 
-g.addEdge(0, 2, 500) 
-g.addEdge(0, 3, 10)
-g.addEdge(1, 3, 70) 
-g.addEdge(1, 2, 80) 
-g.addEdge(1, 4, 90) 
-g.addEdge(2, 4, 40) 
-g.addEdge(3, 4, 200) 
+graph = Graph(5) 
+graph.add_edge(0, 1, 200) 
+graph.add_edge(0, 2, 500) 
+graph.add_edge(0, 3, 10)
+graph.add_edge(1, 3, 70) 
+graph.add_edge(1, 2, 80) 
+graph.add_edge(1, 4, 90) 
+graph.add_edge(2, 4, 40) 
+graph.add_edge(3, 4, 200) 
 
-print(g.KruskalMST())
+
+print(f"The original graph has following edges: \n{graph.edges}\n")
+print(f"The mininum spanning tree using kurskal's MST algorithm has following edges: \n{graph.kruskals_mst()}\n")
