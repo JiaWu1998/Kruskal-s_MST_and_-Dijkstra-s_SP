@@ -42,20 +42,32 @@ class Graph:
                 if self.map[u][adj] != 0 and adj not in sp_path:
                     if compression[u] + self.map[u][adj] < compression[adj]: 
                         compression[adj] = compression[u] + self.map[u][adj]
-                        edges.append((u,adj,compression[adj]))
+                        
+                        exist = False
+                        for idx in range(len(edges)):
+                            if edges[idx][1] == adj:
+                                edges[idx] = (u,adj,compression[adj])
+                                exist = True
+                        if not exist:
+                            edges.append((u,adj,compression[adj]))
         return edges
 
-graph = Graph(9)
-graph.map = [[0, 4, 0, 0, 0, 0, 0, 8, 0], 
-        [4, 0, 8, 0, 0, 0, 0, 11, 0], 
-        [0, 8, 0, 7, 0, 4, 0, 0, 2], 
-        [0, 0, 7, 0, 9, 14, 0, 0, 0], 
-        [0, 0, 0, 9, 0, 10, 0, 0, 0], 
-        [0, 0, 4, 14, 10, 0, 2, 0, 0], 
-        [0, 0, 0, 0, 0, 2, 0, 1, 6], 
-        [8, 11, 0, 0, 0, 0, 1, 0, 7], 
-        [0, 0, 2, 0, 0, 0, 6, 7, 0] 
+graph = Graph(5)
+graph.map = [
+        [0, 200, 500, 10, 0], 
+        [200, 0, 80, 70, 90], 
+        [500, 80, 0, 0, 40], 
+        [10, 70, 0, 0, 200], 
+        [0, 90, 40, 200, 0]
         ]; 
 
-print(graph.dijkstra_sp(0))
+orign_edges = []
+
+for x in range(graph.vertices): 
+    for y in range(x,graph.vertices):
+        if graph.map[x][y] != 0 and (x,y,graph.map[x][y]) not in orign_edges: 
+            orign_edges.append((x,y,graph.map[x][y]))
+
+print(f"The original graph has following edges: \n{orign_edges}\n")
+print(f"The shortest path tree using dijkstra's SP algorithm has following edges: \n{graph.dijkstra_sp(1)}\n")
 
