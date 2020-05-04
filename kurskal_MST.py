@@ -21,17 +21,17 @@ class Graph:
         return self.find(parent, parent[i]) 
 
     # given two parents, compress the two into one
-    def union(self, parent, rank, x, y): 
-        xroot = self.find(parent, x) 
-        yroot = self.find(parent, y) 
+    def union(self, parent, rank, vertex_1, vertex_2): 
+        super_parent_1 = self.find(parent, vertex_1) 
+        super_parent_2 = self.find(parent, vertex_2) 
   
-        if rank[xroot] < rank[yroot]: 
-            parent[xroot] = yroot 
-        elif rank[xroot] > rank[yroot]: 
-            parent[yroot] = xroot 
+        if rank[super_parent_1] < rank[super_parent_2]: 
+            parent[super_parent_1] = super_parent_2 
+        elif rank[super_parent_1] > rank[super_parent_2]: 
+            parent[super_parent_2] = super_parent_1 
         else : 
-            parent[yroot] = xroot 
-            rank[xroot] += 1
+            parent[super_parent_2] = super_parent_1 
+            rank[super_parent_1] += 1
 
     def kruskals_mst(self): 
         out = []
