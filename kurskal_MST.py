@@ -1,22 +1,19 @@
 # Implementation of Kruskals Minimum Spanning Tree Algorithm
 
-# Step 1. Sort all the edges in non-decreasing order of their weight.
-# Step 2. Pick the smallest edge. Check if it forms a cycle with the spanning tree formed so far. If cycle is not formed, include this edge. Else, discard it.
-# Step 3. Repeat step 2 until there are (V-1) edges in the spanning tree.
-
 class Graph: 
     def __init__(self, num_of_vertices): 
         self.vertices = num_of_vertices 
         self.adjacency_matrix = [[0 for _ in range(num_of_vertices)] for _ in range(num_of_vertices)]
         self.edges = [] 
 
+    #extracting all edges (only works with undirected graphs)
     def fill_edges(self):
         for x in range(self.vertices): 
             for y in range(x,self.vertices):
                 if self.adjacency_matrix[x][y] != 0 and (x,y,self.adjacency_matrix[x][y]) not in self.edges: 
                     self.edges.append((x,y,self.adjacency_matrix[x][y]))
 
-    # finds the very first parent/root by using path compression
+    # finds the very first parent/root by using path compression. path compression is OP ;)
     def find(self, parent, i):
         # the very first parent should loop back to itself
         if parent[i] == i: 
