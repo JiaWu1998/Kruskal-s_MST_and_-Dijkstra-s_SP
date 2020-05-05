@@ -68,11 +68,13 @@ graph.fill_edges()
 print(f"\nThe original graph has following edges: \n{graph.edges}\n")
 source = 1
 sp = graph.dijkstra_sp(source)
-print(f"The shortest path tree(source = R2 or 1 in our code) using dijkstra's SP algorithm has following edges: \n{sp}\n")
+print(f"The shortest path tree(source = R{source + 1}) using dijkstra's SP algorithm has following edges: \n{sp}\n")
 print("Here are the shortest paths from source to all vertices:\n")
 print("Source  Destination  Distance\n")
 print("-----------------------------\n")
 
 for i in range(len(sp)):
-    print(f"R{source+1}           R{sp[i][1]}            {sp[i][2]}\n")
+    print(f"R{source+1}           R{sp[i][1]+1}            {sp[i][2]}\n")
 
+print("Note 1: all R node are convert to index terms in our code.(e.g R1 = 0, R2 = 1, R3 = 2, R4 = 3, R5 = 4)")
+print("Note 2: edge = (vertex 1, vertex 2, weight of edge)")

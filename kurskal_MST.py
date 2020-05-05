@@ -72,3 +72,5 @@ graph.fill_edges()
 
 print(f"\nThe original graph has following edges: \n{graph.edges}\n")
 print(f"The mininum spanning tree using kurskal's MST algorithm has following edges: \n{graph.kruskals_mst()}\n")
+print("Note 1: all R node are convert to index terms in our code.(e.g R1 = 0, R2 = 1, R3 = 2, R4 = 3, R5 = 4)")
+print("Note 2: edge = (vertex 1, vertex 2, weight of edge)")
