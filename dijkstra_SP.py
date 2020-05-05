@@ -13,9 +13,16 @@ import sys
 class Graph:
     def __init__(self,num_of_vertices):
         self.vertices = num_of_vertices
-        # Step 2: Given map[i][k], for every map[i], it is a map of distance values  of all vertices depending on vertex i. 
-        self.map = [[0 for _ in range(num_of_vertices)] for _ in range(num_of_vertices)]
+        # Step 2: Given adjacency_matrix[i][k], for every adjacency_matrix[i], it is a map of distance values of all vertices depending on vertex i. 
+        self.adjacency_matrix = [[0 for _ in range(num_of_vertices)] for _ in range(num_of_vertices)]
+        self.edges = []
     
+    def fill_edges(self):
+        for x in range(self.vertices): 
+            for y in range(x,self.vertices):
+                if self.adjacency_matrix[x][y] != 0 and (x,y,self.adjacency_matrix[x][y]) not in self.edges: 
+                    self.edges.append((x,y,self.adjacency_matrix[x][y]))
+
     def minimum_distance(self, sp_path, compression):
         mini_dst = sys.maxsize
         dest = -1
@@ -39,9 +46,9 @@ class Graph:
 
             #update all adjacent vertices of u
             for adj in range(self.vertices):
-                if self.map[u][adj] != 0 and adj not in sp_path:
-                    if compression[u] + self.map[u][adj] < compression[adj]: 
-                        compression[adj] = compression[u] + self.map[u][adj]
+                if self.adjacency_matrix[u][adj] != 0 and adj not in sp_path:
+                    if compression[u] + self.adjacency_matrix[u][adj] < compression[adj]: 
+                        compression[adj] = compression[u] + self.adjacency_matrix[u][adj]
                         
                         exist = False
                         for idx in range(len(edges)):
@@ -53,21 +60,23 @@ class Graph:
         return edges
 
 graph = Graph(5)
-graph.map = [
+graph.adjacency_matrix = [
         [0, 200, 500, 10, 0], 
         [200, 0, 80, 70, 90], 
         [500, 80, 0, 0, 40], 
         [10, 70, 0, 0, 200], 
         [0, 90, 40, 200, 0]
         ]; 
+graph.fill_edges()
 
-orign_edges = []
+print(f"\nThe original graph has following edges: \n{graph.edges}\n")
+source = 1
+sp = graph.dijkstra_sp(source)
+print(f"The shortest path tree(source = R2 or 1 in our code) using dijkstra's SP algorithm has following edges: \n{sp}\n")
+print("Here are the shortest paths from source to all vertices:\n")
+print("Source  Destination  Distance\n")
+print("-----------------------------\n")
 
-for x in range(graph.vertices): 
-    for y in range(x,graph.vertices):
-        if graph.map[x][y] != 0 and (x,y,graph.map[x][y]) not in orign_edges: 
-            orign_edges.append((x,y,graph.map[x][y]))
-
-print(f"The original graph has following edges: \n{orign_edges}\n")
-print(f"The shortest path tree using dijkstra's SP algorithm has following edges: \n{graph.dijkstra_sp(1)}\n")
+for i in range(len(sp)):
+    print(f"R{source+1}           R{sp[i][1]}            {sp[i][2]}\n")
 
