@@ -31,7 +31,7 @@ class Graph:
         # Step 2: Given adjacency_matrix[i][k], for every adjacency_matrix[i], it is a map of distance values of all vertices depending on vertex i. 
         compression = [sys.maxsize] * self.vertices
         compression[source] = 0
-        edges = []
+        sp_edges = []
 
         # Step 3
         while len(sp_path) != self.vertices:
@@ -47,13 +47,13 @@ class Graph:
                         compression[adj] = compression[u] + self.adjacency_matrix[u][adj]
                         
                         exist = False
-                        for idx in range(len(edges)):
-                            if edges[idx][1] == adj:
-                                edges[idx] = (u,adj,compression[adj])
+                        for idx in range(len(sp_edges)):
+                            if sp_edges[idx][1] == adj:
+                                sp_edges[idx] = (u,adj,compression[adj])
                                 exist = True
                         if not exist:
-                            edges.append((u,adj,compression[adj]))
-        return edges
+                            sp_edges.append((u,adj,compression[adj]))
+        return sp_edges
 
 graph = Graph(5)
 graph.adjacency_matrix = [
